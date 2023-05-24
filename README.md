@@ -48,6 +48,10 @@ Go to [bitget](https://www.bitget.com/zh-CN/account/newapi) and get the api key,
 
 ## Version History
 
+* v1.0.1
+    * add log version
+    * fix log transfer amount
+    * change max_amount_range precision
 * v1
     * Initial Release
 
