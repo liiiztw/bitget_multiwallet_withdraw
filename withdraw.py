@@ -1,22 +1,34 @@
 # 載入設定
 import json
+import os
 config_filepath = 'config.json'
 address_filepath = 'wallets.txt'
 
+# 開啟設定
 with open(config_filepath) as f:
     config_dict = json.load(f)
     config_dict['token'] = config_dict['token'].upper()
 with open(address_filepath) as f:
     address_list = f.read().split()
-    
+
+# 亂數定義
 if config_dict['random_amount']:
-    max_amount_range = 5
+    max_amount_range = 100
 else:
     max_amount_range = 0    
 
+
+# 檢查log若存在就往下推一個版本
+filename = 'log.csv'
+counter = 0
+while os.path.isfile(filename):
+    counter += 1
+    filename = f"log{str(counter).zfill(2)}.csv"
+
+
+
 try:
     import pandas as pd
-
     import bitget.spot.account_api as account
     import bitget.spot.public_api as public
     import bitget.spot.wallet_api as wallet
@@ -61,26 +73,31 @@ try:
 
     import time
     import random
-    if bal >= (len(address_list)*(config_dict['amount']*(1+max_amount_range/1000)+minfee)):
+    if bal >= (len(address_list)*(config_dict['amount']*(1+max_amount_range/10000)+minfee)):
         for address in address_list:
 
-            ratio = (1+random.randint(0,max_amount_range)/1000)
+            ratio = (1+random.randint(0,max_amount_range)/10000)
+            send_amount = str(config_dict['amount']*ratio)[:10]
 
             res_withdraw = walletApi.withdrawal(
                 coin=config_dict['token'],
                 chain=config_dict['token'],
                 address=address,
-                amount=str(config_dict['amount']*ratio)[:10],
+                amount=send_amount,
                 remark=None
             )
             
+
             try:
-                pd.read_csv('log.csv')
-            except:
-                with open('log.csv', 'w') as f: f.write("time,targetAddress,network,amount,token,fee\n")
-                pass
-            with open('log.csv', 'a') as f: f.write(f"{pd.to_datetime('now').ceil(freq='s')},{address},{config_dict['network']},{config_dict['amount']},{config_dict['token']},{minfee}\n")
-            print(f"[{pd.to_datetime('now').ceil(freq='s')}] {address} {config_dict['network']}:{config_dict['amount']}{config_dict['token']} fee:{minfee}")
+                pd.read_csv(filename)
+            except FileNotFoundError:
+                with open(filename, 'w') as f:
+                    f.write("time,targetAddress,network,amount,token,fee\n")
+
+            with open(filename, 'a') as f:
+                f.write(f"{pd.to_datetime('now').ceil(freq='s')},{address},{config_dict['network']},{send_amount},{config_dict['token']},{minfee}\n")
+
+            print(f"[{pd.to_datetime('now').ceil(freq='s')}] {address} {config_dict['network']}:{send_amount}{config_dict['token']} fee:{minfee}")
             
             delay = random.randint(config_dict['delay']['min'],config_dict['delay']['max'])
             for t in range(delay):
