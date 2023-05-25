@@ -81,7 +81,7 @@ try:
 
             res_withdraw = walletApi.withdrawal(
                 coin=config_dict['token'],
-                chain=config_dict['token'],
+                chain=config_dict['network'],
                 address=address,
                 amount=send_amount,
                 remark=None
