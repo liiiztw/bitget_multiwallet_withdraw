@@ -44,6 +44,7 @@ try:
             pd.DataFrame(res_coin_info[0]['chains'])[['chain','minWithdrawAmount','withdrawFee']]
         ], axis=1
     )
+    df_coin = df_coin.loc[df_coin['withdrawable']=='true']
     print(df_coin)
 except Exception as msg:
     print(msg)
