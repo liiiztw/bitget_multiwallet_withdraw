@@ -1,11 +1,13 @@
+# Don't use v1.0.2 before, there are big bugs. 
+
 # bitget_multiwallet_withdraw
 Just for 阿彬168
 
 ## Give me a coffe 
 
-metamask wallet
+only Polygon USDT 
 ```
-0x9FedBBC14302838837284595504Ff15487A5ac85
+0xDDaAE2FF362928986A103DA132a3771e15117DD5
 ```
 
 ## Description
