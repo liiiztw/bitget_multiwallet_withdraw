@@ -5,7 +5,7 @@ Just for 阿彬168
 
 ## Give me a coffe 
 
-only Polygon USDT 
+Polygon USDT 
 ```
 0xDDaAE2FF362928986A103DA132a3771e15117DD5
 ```
